@@ -9,7 +9,7 @@ Features
 
 # To use:
 
-1. Clone or download this repository to your computer.
+1. Clone or download the folder to your computer.
 2. Install Python (if not already installed).
 3. Create a virtual environment in your folder ( python -m venv <environment_name> )
 4. Install required Python packages: pip install flask
