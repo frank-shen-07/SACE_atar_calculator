@@ -11,10 +11,11 @@ Features
 
 1. Clone or download this repository to your computer.
 2. Install Python (if not already installed).
-3. Install required Python packages: pip install flask
-4. Run the Flask server: python SACEcalculator.py
-5. Open your browser and go to http://localhost:5000
-6. Enter your subjects and grades/scores, then click “Calculate ATAR” to get your result.
+3. Create a virtual environment in your folder ( python -m venv <environment_name> )
+4. Install required Python packages: pip install flask
+5. Run the Flask server: python SACEcalculator.py
+6. Open your browser and go to http://localhost:5000
+7. Enter your subjects and grades/scores, then click “Calculate ATAR” to get your result.
 
 
 
