@@ -4,14 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATAR Calculator</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
         <h1>SACE ATAR Calculator</h1>
-        <div><p>How to use: Place your expected highest-scoring 20 credit subjects in the first four subject spaces. Place Half-year subjects, VET, or your worst expected subject in the 5th subject space. Either choose a grade, or press toggle to enter your expected/achieved scaled scores for each subject. Make sure there are no duplicate subjects.</p></div>
+        <div>
+            <p>
+                How to use: Place your expected highest-scoring 20 credit subjects in the first four subject spaces.
+                Place Half-year subjects, VET, or your worst expected subject in the 5th subject space.
+                Either choose a grade, or press toggle to enter your expected/achieved scaled scores for each subject.
+                Make sure there are no duplicate subjects.
+            </p>
+        </div>
         <form id="atar-form">
             <table>
                 <thead>
@@ -23,12 +28,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Repeat this block for each subject row -->
                     {% for i in range(1, 6) %}
                     <tr>
                         <td>
-                            <select id="subject{{ i }}" name="subject{{ i }}" class="js-example-basic-single subject-select" required onchange="updateGradeOptions({{ i }})">
-                            </select>
+                            <div class="combo-wrapper">
+                                <input type="text"
+                                       class="subject-combo"
+                                       id="subject{{ i }}"
+                                       name="subject{{ i }}"
+                                       autocomplete="off"
+                                       required
+                                       placeholder="Select a subject..."
+                                       onfocus="showSubjectList({{ i }})"
+                                       oninput="filterSubjectList({{ i }})"
+                                       >
+                                <ul class="combo-list" id="subject-list{{ i }}" style="display:none;"></ul>
+                            </div>
                         </td>
                         <td>
                             <select id="grade{{ i }}" name="grade{{ i }}" class="grade-select">
@@ -49,8 +64,6 @@
         </form>
         <div id="result" style="margin-top: 20px; font-size: 18px;"></div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
