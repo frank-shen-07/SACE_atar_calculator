@@ -5,7 +5,47 @@ const standardGrades = [
     "A++/Merit", "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "E+", "E", "E-"
 ];
 const subjectOptions = [
-    "Accounting", "AIF", "Ancient Studies", "Art", "Biology", "Business Innovation", "Chemistry", "Dance", "Design", "Digital Tech", "Drama", "EAL", "Economics", "English", "English Literary Studies", "Essential Mathematics", "Film Studies", "Geography", "General Mathematics", "Headstart", "Health and Wellbeing", "Languages", "Legal Studies", "Mathematical Methods", "Modern History", "Music Ensemble", "Music Explorations", "Music Performance", "Music Studies", "Philosophy", "Physical Education", "Physics", "Psychology", "Religion", "Research Project", "Scientific Studies", "Society and Culture", "Specialist Mathematics", "Tourism", "VET", "Workplace Practices"
+    "Accounting", 
+    "AIF", 
+    "Ancient Studies", 
+    "Art", 
+    "Biology", 
+    "Business Innovation", 
+    "Chemistry", 
+    "Dance", 
+    "Design", 
+    "Digital Tech", 
+    "Drama", 
+    "EAL", 
+    "Economics", 
+    "English", 
+    "English Literary Studies", 
+    "Essential Mathematics", 
+    "Film Studies", 
+    "Geography", 
+    "General Mathematics", 
+    "Headstart", 
+    "Health and Wellbeing", 
+    "Languages", 
+    "Legal Studies", 
+    "Mathematical Methods", 
+    "Modern History", 
+    "Music Ensemble", 
+    "Music Explorations", 
+    "Music Performance", 
+    "Music Studies", 
+    "Philosophy", 
+    "Physical Education", 
+    "Physics", 
+    "Psychology", 
+    "Religion", 
+    "Research Project", 
+    "Scientific Studies", 
+    "Society and Culture", 
+    "Specialist Mathematics", 
+    "Tourism", 
+    "VET", 
+    "Workplace Practices"
 ];
 
 // Subject selection logic
