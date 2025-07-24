@@ -30,9 +30,12 @@ def home():
 
 @app.route("/calculate", methods=["POST"])
 def calculate():
+    
     try:
         subjects = [request.form[f"subject{i}"] for i in range(1, 6)]
         scores = []
+        vet_index = None
+        adjusted = request.form.get("adjusted", "false") == "true"
 
         # Check for duplicate subjects
         if len(subjects) != len(set(subjects)):
@@ -43,30 +46,51 @@ def calculate():
             score_input = request.form.get(f"score{i}")
             subject = subjects[i - 1]
 
+            if subject == "VET":
+                if grade_input == vet_identifier:
+                    vet_index = i - 1
+                    scores.append(None)  # Placeholder for VET, to be filled later
+                    continue
+                else:
+                    return jsonify({"error": "Invalid selection for VET."})
+
             if score_input and not grade_input:
                 try:
-                    scores.append(float(score_input))  # Ensure score_input is a float
+                    scores.append(float(score_input))
                 except ValueError:
                     return jsonify({"error": f"Invalid scaled score for Subject {i}. Must be a number."})
+
             elif grade_input and not score_input:
-                if subject == "Headstart":  # Special handling for Headstart
+                if subject == "Headstart":
                     if grade_input in headstart_scores:
-                        scores.append(headstart_scores[grade_input])  # Map Headstart grades to scores
+                        scores.append(headstart_scores[grade_input])
                     else:
                         return jsonify({"error": f"Invalid grade {grade_input} for Headstart, please select HD, D, C, P"})
-                elif subject == "VET":  # Special handling for VET
-                    if grade_input == vet_identifier:
-                        vet_score = np.mean(sorted(scores[:4], reverse=True)[:4]) / 2
-                        scores.append(vet_score)
-                    else:
-                        return jsonify({"error": "Invalid selection for VET."})
                 elif (subject, grade_input) in grade_to_score:
-                    scores.append(float(grade_to_score[(subject, grade_input)]))  # Map grades to scores for other subjects
+                    scores.append(float(grade_to_score[(subject, grade_input)]))
                 else:
                     return jsonify({"error": f"Invalid grade {grade_input} for {subject}."})
             else:
                 return jsonify({"error": "Please select either a grade or a scaled score for each subject."})
 
+        # VET special calculation
+        if vet_index is not None:
+            non_vet_subjects = [subjects[i] for i in range(5) if i != vet_index]
+            non_vet_scores = [scores[i] for i in range(5) if i != vet_index]
+            half_year_indices = [i for i, subj in enumerate(non_vet_subjects) if subj in half_year_subjects]
+            if half_year_indices:
+                # If there is at least one half-year subject, double it.
+                vet_averages = []
+                for idx in half_year_indices:
+                    doubled = non_vet_scores[idx] * 2
+                    fulls = [non_vet_scores[j] for j in range(4) if j != idx]
+                    vet_averages.append((sum(fulls) + doubled) / 4)
+                vet_score = max(vet_averages)
+            else:
+                # All the other subjects are full-years, just use a simple arithemetic mean
+                vet_score = np.mean(non_vet_scores)
+            scores[vet_index] = vet_score
+            
         # Halve the fifth subject if it's not a half-year subject
         fifth_index = 4
         try:
@@ -77,12 +101,29 @@ def calculate():
 
         # Aggregate calculation
         top4_scores = sorted(scores[:4], reverse=True)[:4]
-        aggregate = sum(top4_scores) + scores[fifth_index]
 
-        # Match ATAR
-        closest_atar = data.loc[(data["Aggregate"] - aggregate).abs().idxmin(), "ATAR"]
+        # Calculate aggregate for RAW atar
+        raw_aggregate = sum(top4_scores) + scores[fifth_index]
+        raw_atar = data.loc[(data["Aggregate"] - raw_aggregate).abs().idxmin(), "ATAR"]
 
-        return jsonify({"aggregate": round(aggregate, 2), "atar": round(closest_atar, 2)})
+        # Calculate aggregate for ADJUSTED atar
+        bonus_subjects = ["Specialist Mathematics", "Mathematical Methods", "English", "Languages", "English Literary Studies"]
+        bonus = sum(1 for s in subjects if s in bonus_subjects)
+        if bonus == 1:
+            adjusted_aggregate = raw_aggregate + 2
+        elif bonus >= 2:
+            adjusted_aggregate = raw_aggregate + 4
+        else:
+            adjusted_aggregate = raw_aggregate
+
+        adjusted_atar = data.loc[(data["Aggregate"] - adjusted_aggregate).abs().idxmin(), "ATAR"]
+
+        return jsonify({
+            "aggregate_raw": round(raw_aggregate, 2),
+            "atar_raw": round(raw_atar, 2),
+            "aggregate_adjusted": round(adjusted_aggregate, 2),
+            "atar_adjusted": round(adjusted_atar, 2)
+        })
 
     except Exception as e:
         return jsonify({"error": str(e)})
