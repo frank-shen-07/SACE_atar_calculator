@@ -68,10 +68,8 @@ def calculate():
                         return jsonify({"error": f"Invalid grade {grade_input} for Headstart, please select HD, D, C, P"})
                 elif (subject, grade_input) in grade_to_score:
                     scores.append(float(grade_to_score[(subject, grade_input)]))
-                else:
-                    return jsonify({"error": f"Invalid grade {grade_input} for {subject}."})
             else:
-                return jsonify({"error": "Please select either a grade or a scaled score for each subject."})
+                return jsonify({""})
 
         # VET special calculation
         if vet_index is not None:
@@ -93,11 +91,9 @@ def calculate():
             
         # Halve the fifth subject if it's not a half-year subject
         fifth_index = 4
-        try:
-            if subjects[fifth_index] not in half_year_subjects:
-                scores[fifth_index] = float(scores[fifth_index]) / 2  # Ensure numeric division
-        except ValueError:
-            return jsonify({"error": f"Invalid score for Subject {subjects[fifth_index]}."})
+        
+        if subjects[fifth_index] not in half_year_subjects:
+            scores[fifth_index] = float(scores[fifth_index]) / 2  # Ensure numeric division
 
         # Aggregate calculation
         top4_scores = sorted(scores[:4], reverse=True)[:4]
