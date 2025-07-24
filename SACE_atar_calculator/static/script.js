@@ -179,12 +179,41 @@ function toggleInput(row) {
     }
 }
 
-// Form submission
+// Calculate button and also toggle button logic
 document.getElementById("atar-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+
+    // Add the adjusted atar logic (doesn't matter now, but you can keep it)
+    const isAdjusted = document.getElementById("check-5").checked;
+    formData.append("adjusted", isAdjusted ? "true" : "false");
+
     const response = await fetch("/calculate", { method: "POST", body: formData });
     const result = await response.json();
     const resultDiv = document.getElementById("result");
-    resultDiv.textContent = result.error ? result.error : `Your calculated ATAR is: ${result.atar}`;
+    
+    if (result.error) {
+        resultDiv.textContent = result.error;
+        lastRawResult = null;
+        lastAdjustedResult = null;
+    } else {
+        lastRawResult = result.atar_raw;
+        lastAdjustedResult = result.atar_adjusted;
+        resultDiv.textContent = isAdjusted
+            ? `Your adjusted ATAR is: ${lastAdjustedResult}`
+            : `Your raw ATAR is: ${lastRawResult}`;
+    }
 });
+
+//toggle atar score when toggle button is clicked
+document.getElementById("check-5").addEventListener("change", function() {
+    const resultDiv = document.getElementById("result");
+    if (lastRawResult !== null && lastAdjustedResult !== null) {
+        if (this.checked) {
+            resultDiv.textContent = `Your adjusted ATAR is: ${lastAdjustedResult}`;
+        } else {
+            resultDiv.textContent = `Your raw ATAR is: ${lastRawResult}`;
+        }
+    }
+});
+
