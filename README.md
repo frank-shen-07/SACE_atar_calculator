@@ -1,5 +1,7 @@
 # SACE ATAR calculator
 
+Website: https://frankshen1.pythonanywhere.com/
+
 A demo web app to estimate your SACE ATAR based on expected subject grades or scaled scores.
 
 Features
@@ -7,7 +9,7 @@ Features
 - A feature to toggle between entering grade letters or scaled scores.
 - Instantly see your estimated ATAR after submitting your subjects and grades.
 
-# To use:
+# To use the web app on your own device:
 
 1. Clone or download the folder to your computer.
 2. Install Python (if not already installed).
@@ -16,7 +18,6 @@ Features
 5. Run the Flask server: python SACEcalculator.py
 6. Open your browser and go to http://localhost:5000
 7. Enter your subjects and grades/scores, then click “Calculate ATAR” to get your result.
-
 
 
 
