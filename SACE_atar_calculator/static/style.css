@@ -1,181 +1,307 @@
+html, body {
+    height: 100%;
+}
+
 body {
-    font-family: 'Roboto', Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, #f4f3ff 0%, #faf5ff 45%, #eef2ff 100%);
+    color: #111827;
     margin: 0;
-    padding: 0;
+    padding: 24px 12px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+
+
+
+body::before {
+    content: "";
+    position: fixed;
+
+    /* push the whole blob box down and let it span most of the viewport */
+    inset: -10vh -30vw -35vh -30vw;   /* top, right, bottom, left */
+    height: 120vh;
+    z-index: -1;
+    pointer-events: none;
+
+    /* 5 purple curved bands (rings) */
+    background-image:
+        radial-gradient(130% 230% at -10% -10%,
+            transparent 0,
+            transparent 56%,
+            rgba(129, 140, 248, 0.75) 56%,
+            rgba(129, 140, 248, 0.75) 64%,
+            transparent 64%,
+            transparent 100%),
+        radial-gradient(130% 230% at 25% -5%,
+            transparent 0,
+            transparent 52%,
+            rgba(167, 139, 250, 0.65) 52%,
+            rgba(167, 139, 250, 0.65) 60%,
+            transparent 60%,
+            transparent 100%),
+        radial-gradient(130% 230% at 55% 0%,
+            transparent 0,
+            transparent 54%,
+            rgba(196, 181, 253, 0.7) 54%,
+            rgba(196, 181, 253, 0.7) 62%,
+            transparent 62%,
+            transparent 100%),
+        radial-gradient(140% 250% at 80% 5%,
+            transparent 0,
+            transparent 58%,
+            rgba(165, 180, 252, 0.6) 58%,
+            rgba(165, 180, 252, 0.6) 66%,
+            transparent 66%,
+            transparent 100%),
+        radial-gradient(150% 260% at 110% 10%,
+            transparent 0,
+            transparent 60%,
+            rgba(129, 140, 248, 0.5) 60%,
+            rgba(129, 140, 248, 0.5) 68%,
+            transparent 68%,
+            transparent 100%);
+
+    background-repeat: no-repeat;
+    opacity: 0.9;
+
+    /* slightly faster animation */
+    animation: waveSwirl 22s ease-in-out infinite alternate;
+}
+
+
+
+
+
+
+
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .container {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 28px 18px 24px 18px;
-    background: #fff;
-    box-shadow: 0 8px 28px rgba(60,72,88,0.12);
-    border-radius: 12px;
-	z-index: 0;
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px 20px 10px 20px;
+    background: rgba(255, 255, 255, 0.86);     /* was #ffffff */
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(26px);               /* glass effect */
+    -webkit-backdrop-filter: blur(26px);
+    z-index: 0;
+}
+
+
+.header {
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 h1 {
-    text-align: center;
-    color: #2a2a2a;
-    font-size: 2.2rem;
-    margin-bottom: 14px;
+    color: #0f172a;
+    font-size: 2.0rem;
+    margin: 0 0 8px 0;
     font-weight: 700;
+    letter-spacing: -0.03em;
 }
 
-.container > div > p {
+.subtitle {
+    font-size: 0.98rem;
+    margin: 0;
+    color: #64748b;
+    max-width: 540px;
+    margin-inline: auto;
+}
+
+.info-card {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.info-card h2 {
     font-size: 1rem;
-    margin-bottom: 20px;
-    color: #5d5d5d;
-    text-align: center;
+    margin: 0 0 6px 0;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+.info-card ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: #4b5563;
+    font-size: 0.75rem;
 }
 
 table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    margin: 24px 0 16px 0;
-    background: #f8f9fa;
-    border-radius: 8px;
+    margin: 20px 0 12px 0;
+    background: #f8fafc;
+    border-radius: 12px;
     overflow: hidden;
 }
 
 th, td {
-    padding: 11px 8px;
+    padding: 10px 10px;
     text-align: left;
 }
 
 th {
-    background: #5762d5;
-    color: #fff;
+    background: linear-gradient(90deg, #4147dd, #6366f1);
+    color: #f9fafb;
     font-weight: 500;
-    font-size: 1rem;
-    letter-spacing: 0.01em;
+    font-size: 0.92rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
 }
 
 td {
-    background: #fff;
-    border-bottom: 1px solid #ededed;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 tr:last-child td {
     border-bottom: none;
 }
 
-input[type="number"], select, .grade-select {
+/* Inputs & selects */
+input[type="number"], select, .grade-select, .subject-combo, .scaled-input {
     width: 100%;
     box-sizing: border-box;
-    padding: 8px 40px 8px 12px;
-    border: 1px solid #cdd0d4;
-    border-radius: 4px;
-    font-size: 1rem;
-    font-family: 'Roboto', Arial, sans-serif;
+    padding: 8px 12px;
+    border: 1px solid #d4dbf4;
+    border-radius: 8px;
+    font-size: 0.98rem;
+    font-family: inherit;
     background: #f9fafb;
-    color: #333;
-    transition: border 0.2s, box-shadow 0.2s;
+    color: #111827;
+    transition: border 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, transform 0.06s ease;
     cursor: pointer;
 }
 
-input[type="number"]:focus, select:focus, .grade-select:focus {
-    outline: 2px solid #a5b4fc;
-    border-color: #5762d5;
-    background-color: #fff;
+input[type="number"]:focus,
+select:focus,
+.subject-combo:focus,
+.scaled-input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.14);
+    background-color: #ffffff;
 }
 
-input[type="number"][disabled], select[disabled], .grade-select[disabled] {
-    background-color: #ececec;
-    color: #adadad;
+/* Active mode highlight */
+.active-input {
+    border-color: #4f46e5 !important;
+    box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.12);
+    background-color: #ffffff;
+}
+
+input[disabled], select[disabled] {
+    background-color: #e5e7eb;
+    color: #9ca3af;
     cursor: not-allowed;
-}
-
-input[type="number"] {
-    padding-right: 12px;
-    background-image: none;
-    cursor: auto;
 }
 
 select {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    background-image:
+      radial-gradient(circle at 65% 50%, #4f46e5 2px, transparent 2px),
+      radial-gradient(circle at 55% 50%, #4f46e5 2px, transparent 2px);
+    background-position: right 10px center, right 5px center;
+    background-repeat: no-repeat;
 }
 
+/* Subject combo dropdown */
 .combo-wrapper {
     position: relative;
     width: 100%;
     min-width: 220px;
-	z-index: 1;
+    z-index: 1;
 }
 
 .subject-combo {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 8px 40px 8px 12px;
-    border: 1px solid #cdd0d4;
-    border-radius: 4px;
-    font-size: 1rem;
-    background: #f9fafb;
-    color: #333;
-    transition: border 0.2s, box-shadow 0.2s;
-    cursor: pointer;
-    font-family: 'Roboto', Arial, sans-serif;
-}
-
-.subject-combo:focus {
-    outline: 2px solid #a5b4fc;
-    border-color: #5e75eb;
-    background-color: #fff;
-}
-
-.subject-combo[disabled] {
-    background-color: #ececec;
-    color: #adadad;
-    cursor: not-allowed;
+    cursor: text;
 }
 
 .combo-list {
     position: fixed;
     left: 0;
     z-index: 9999;
-    background: #fff;
-    border: 1px solid #a0a0a0;
-    border-top: none;
-    max-height: 180px;
+    background: #ffffff;
+    border: 1px solid #cbd5f5;
+    border-radius: 0 0 10px 10px;
+    max-height: 200px;
     overflow-y: auto;
-    border-radius: 0 0 6px 6px;
     list-style: none;
     margin: 0;
-    padding: 0;
-    box-shadow: 0 2px 8px rgba(88, 110, 180, 0.08);
+    padding: 4px 0;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14);
 }
 
 .combo-list li {
     padding: 8px 12px;
     cursor: pointer;
-    transition: background 0.12s;
+    transition: background 0.12s ease, color 0.12s ease;
+    font-size: 0.95rem;
 }
 
 .combo-list li:hover {
-    background: #f3f6ff;
+    background: #eef2ff;
+    color: #111827;
 }
 
-/* From Uiverse.io by Shoh2008 */ 
+/* Form footer */
+.form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+
+/* Raw / adjusted toggle row */
+.atar-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.92rem;
+    color: #4b5563;
+}
+
+.toggle-label {
+    font-weight: 500;
+    color: #1f2937;
+}
+
+/* Checkbox toggle (adapted to inline layout) */
 .checkbox-wrapper-5 {
-    position: absolute;
-    top: 643px;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: static;
+    transform: none;
 }
 
 .checkbox-wrapper-5 .check {
-    --size: 40px;
+    --size: 28px;
     position: relative;
-    position: right;
-    background: linear-gradient(90deg, #9d9af3, #5e75eb);
+    background: linear-gradient(90deg, #818cf8, #4f46e5);
     line-height: 0;
     perspective: 400px;
     font-size: var(--size);
+    border-radius: 999px;
 }
 
 .checkbox-wrapper-5 .check input[type="checkbox"],
@@ -195,7 +321,7 @@ select {
 .checkbox-wrapper-5 .check label {
     width: calc(2.2 * var(--size));
     height: var(--size);
-    background: #d7d7d7;
+    background: #e5e7eb;
     overflow: hidden;
 }
 
@@ -206,10 +332,11 @@ select {
     height: calc(.8 * var(--size));
     top: calc(.1 * var(--size));
     left: calc(.1 * var(--size));
-    background: linear-gradient(45deg, #dedede, #ffffff);
-    box-shadow: 0 6px 7px rgba(0,0,0,0.3);
+    background: linear-gradient(45deg, #ffffff, #f9fafb);
+    box-shadow: 0 4px 7px rgba(15, 23, 42, 0.33);
     outline: none;
     margin: 0;
+    border-radius: 999px;
 }
 
 .checkbox-wrapper-5 .check input[type="checkbox"]:checked {
@@ -229,7 +356,7 @@ select {
     top: calc(.5 * var(--size));
     height: var(--size);
     letter-spacing: calc(-0.04 * var(--size));
-    color: #9b9b9b;
+    color: #9ca3af;
     font-family: "Times New Roman", serif;
     z-index: 2;
     font-size: calc(.6 * var(--size));
@@ -264,65 +391,58 @@ select {
     line-height: 0;
 }
 
-#checkbox-text-1 {
-    font-family: 'Roboto', Arial, sans-serif;
-    position: absolute;
-    top: 643px;
-    left: 44%;
-    transform: translate(-50%, -50%);
-}
-
-#checkbox-text-2 {
-    font-family: 'Roboto', Arial, sans-serif;
-    position: absolute;
-    top: 643px;
-    left: 57%;
-    transform: translate(-50%, -50%);
-}
-
+/* Buttons */
 .button-16 {
-    background-color: #5565d4;
-    border: 1px solid #5565d4;
-    border-radius: 5px;
-    color: #fff;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    border: 1px solid #4f46e5;
+    border-radius: 999px;
+    color: #ffffff;
     cursor: pointer;
-    font-family: 'Roboto', Arial, sans-serif;
-    font-size: 1rem;
+    font-family: inherit;
+    font-size: 0.98rem;
     font-weight: 500;
-    height: 38px;
-    min-width: 58px;
-    padding: 0 18px;
+    height: 40px;
+    min-width: 130px;
+    padding: 0 22px;
     text-align: center;
     user-select: none;
-    transition: background 0.15s, box-shadow 0.2s, color 0.15s;
+    transition: background 0.15s ease, box-shadow 0.18s ease, transform 0.06s ease;
     margin-top: 4px;
-    margin-left: 8px;
-    letter-spacing: 0.01em;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+    box-shadow: 0 8px 18px rgba(79, 70, 229, 0.22);
 }
 
-.button-16:hover, .button-16:focus {
-    background: #3540a6;
-    color: #e5e8fa;
-    border-color: #2a2a2a;
+.button-16:hover,
+.button-16:focus {
+    background: linear-gradient(135deg, #4338ca, #4f46e5);
+    border-color: #4338ca;
     outline: none;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 26px rgba(79, 70, 229, 0.35);
 }
 
 .button-16:active {
-    background: #253087;
+    background: linear-gradient(135deg, #3730a3, #4338ca);
+    transform: translateY(0);
+    box-shadow: 0 6px 14px rgba(79, 70, 229, 0.25);
 }
 
-#result {
-    margin-top: 30px;
-    font-size: 18px;
+/* Result box */
+.result-card {
+    margin-top: 20px;
+    padding: 12px 14px;
+    font-size: 1.02rem;
     text-align: center;
     font-weight: 500;
-    color: #1a2247;
+    color: #111827;
+    background: #f1f5f9;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
 }
 
+/* Responsive */
 @media (max-width: 700px) {
     .container {
-        padding: 10px 3vw;
+        padding: 18px 12px;
     }
     table, thead, tbody, th, td, tr {
         display: block;
@@ -333,28 +453,59 @@ select {
     }
     tr {
         margin-bottom: 18px;
-        border-radius: 6px;
-        background: #fff;
-        box-shadow: 0 2px 4px rgba(70,80,100,0.05);
+        border-radius: 10px;
+        background: #ffffff;
+        box-shadow: 0 4px 10px rgba(148, 163, 184, 0.22);
+        padding: 4px 6px;
     }
     td {
         border: none;
         position: relative;
-        padding-left: 48%;
+        padding: 8px 10px 10px 48%;
         min-height: 38px;
-        background: #fff;
+        background: #ffffff;
+        font-size: 0.95rem;
     }
     td:before {
         position: absolute;
-        left: 12px;
-        top: 11px;
-        width: 44%;
+        left: 10px;
+        top: 9px;
+        width: 40%;
         white-space: nowrap;
         font-weight: 600;
-        color: #7683bf;
+        color: #6366f1;
+        font-size: 0.83rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
     }
     td:nth-of-type(1):before { content: "Subject"; }
     td:nth-of-type(2):before { content: "Grade"; }
     td:nth-of-type(3):before { content: "Scaled Score"; }
-    td:nth-of-type(4):before { content: "Toggle"; }
+
+    .form-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .atar-toggle {
+        justify-content: center;
+    }
 }
+
+
+
+
+
+@keyframes waveSwirl {
+    0% {
+        transform: translate3d(-6vw, -3vh, 0) rotate(-4deg) scale(1.02);
+    }
+    50% {
+        transform: translate3d(2vw, 2vh, 0) rotate(1deg) scale(1.05);
+    }
+    100% {
+        transform: translate3d(6vw, 4vh, 0) rotate(4deg) scale(1.03);
+    }
+}
+
+
