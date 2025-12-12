@@ -5,46 +5,46 @@ const standardGrades = [
     "A++/Merit", "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "E+", "E", "E-"
 ];
 const subjectOptions = [
-    "Accounting", 
-    "AIF", 
-    "Ancient Studies", 
-    "Art", 
-    "Biology", 
-    "Business Innovation", 
-    "Chemistry", 
-    "Dance", 
-    "Design", 
-    "Digital Tech", 
-    "Drama", 
-    "EAL", 
-    "Economics", 
-    "English", 
-    "English Literary Studies", 
-    "Essential Mathematics", 
-    "Film Studies", 
-    "Geography", 
-    "General Mathematics", 
-    "Headstart", 
-    "Health and Wellbeing", 
-    "Languages", 
-    "Legal Studies", 
-    "Mathematical Methods", 
-    "Modern History", 
-    "Music Ensemble", 
-    "Music Explorations", 
-    "Music Performance", 
-    "Music Studies", 
-    "Philosophy", 
-    "Physical Education", 
-    "Physics", 
-    "Psychology", 
-    "Religion", 
-    "Research Project", 
-    "Scientific Studies", 
-    "Society and Culture", 
-    "Specialist Mathematics", 
-    "Tourism", 
-    "VET", 
+    "Accounting",
+    "AIF",
+    "Ancient Studies",
+    "Art",
+    "Biology",
+    "Business Innovation",
+    "Chemistry",
+    "Dance",
+    "Design",
+    "Digital Tech",
+    "Drama",
+    "EAL",
+    "Economics",
+    "English",
+    "English Literary Studies",
+    "Essential Mathematics",
+    "Film Studies",
+    "Geography",
+    "General Mathematics",
+    "Headstart",
+    "Health and Wellbeing",
+    "Languages",
+    "Legal Studies",
+    "Mathematical Methods",
+    "Modern History",
+    "Music Ensemble",
+    "Music Explorations",
+    "Music Performance",
+    "Music Studies",
+    "Philosophy",
+    "Physical Education",
+    "Physics",
+    "Psychology",
+    "Religion",
+    "Research Project",
+    "Scientific Studies",
+    "Society and Culture",
+    "Specialist Mathematics",
+    "Tourism",
+    "VET",
     "Workplace Practices"
 ];
 
@@ -102,7 +102,6 @@ function filterSubjectList(row) {
     const list = document.getElementById(`subject-list${row}`);
     const filter = input.value.toLowerCase();
 
-    // Clear all messages as soon as filtering begins
     clearAllMessages();
 
     [...list.children].forEach(li => {
@@ -117,12 +116,63 @@ function selectSubject(row, value) {
     clearAllMessages();
 }
 
+// ==================== Grade / Scaled Score Mode Logic ====================
 
-// ==================== Grade/Toggle Logic ====================
+function setGradeMode(row) {
+    const gradeSelect = document.getElementById(`grade${row}`);
+    const scoreInput = document.getElementById(`score${row}`);
+    const subject = document.getElementById(`subject${row}`).value;
+
+    if (!gradeSelect || !scoreInput) return;
+
+    // Headstart & VET: grades only
+    if (subject === "Headstart" || subject === "VET") {
+        scoreInput.value = "";
+        scoreInput.disabled = true;
+    } else {
+        scoreInput.disabled = false;
+    }
+
+    // Clear scaled score when switching to grade mode
+    if (scoreInput.value !== "") {
+        scoreInput.value = "";
+    }
+
+    gradeSelect.classList.add("active-input");
+    scoreInput.classList.remove("active-input");
+}
+
+function setScoreMode(row) {
+    const gradeSelect = document.getElementById(`grade${row}`);
+    const scoreInput = document.getElementById(`score${row}`);
+    const subject = document.getElementById(`subject${row}`).value;
+
+    if (!gradeSelect || !scoreInput || !subject) return;
+
+    if (subject === "Headstart") {
+        alert("Headstart uses fixed scores. Please choose a grade (HD, D, C, P).");
+        return;
+    }
+
+    if (subject === "VET") {
+        alert("VET uses the average of your top 4 subjects. Please use the provided grade option.");
+        return;
+    }
+
+    // When using scaled score, clear the grade selection
+    gradeSelect.selectedIndex = 0;
+    gradeSelect.classList.remove("active-input");
+
+    scoreInput.disabled = false;
+    scoreInput.classList.add("active-input");
+}
+
+// ==================== Grade Options ====================
 
 function updateGradeOptions(row) {
     const subject = document.getElementById(`subject${row}`).value;
     const gradeSelect = document.getElementById(`grade${row}`);
+    const scoreInput = document.getElementById(`score${row}`);
 
     gradeSelect.innerHTML = '<option value="" disabled selected>Select a grade</option>';
     let grades = [];
@@ -139,33 +189,18 @@ function updateGradeOptions(row) {
         option.textContent = grade;
         gradeSelect.appendChild(option);
     });
-}
 
-function toggleInput(row) {
-    const gradeSelect = document.getElementById(`grade${row}`);
-    const scoreInput = document.getElementById(`score${row}`);
-    const subject = document.getElementById(`subject${row}`).value;
-
-    if (subject === "Headstart") {
-        alert("Toggle disabled for Headstart. Use predefined grades: HD, D, C, P.");
-        return;
-    }
-    if (subject === "VET") {
-        alert("Toggle disabled for VET. Use predefined grade: Average of top 4 subjects.");
-        return;
-    }
-
-    if (gradeSelect.disabled) {
-        gradeSelect.disabled = false;
-        scoreInput.disabled = true;
+    // Headstart & VET: grades only
+    if (subject === "Headstart" || subject === "VET") {
         scoreInput.value = "";
+        scoreInput.disabled = true;
     } else {
-        gradeSelect.disabled = true;
         scoreInput.disabled = false;
-        gradeSelect.selectedIndex = 0;
     }
-}
 
+    // Default to grade mode whenever subject changes
+    setGradeMode(row);
+}
 
 // ==================== ATAR Calculation Logic ====================
 
@@ -173,7 +208,6 @@ let hasCalculated = false;
 let lastRawResult = null;
 let lastAdjustedResult = null;
 
-// Main calculation function (used for both manual and auto updates)
 async function recalculateATAR() {
     const form = document.getElementById("atar-form");
     const formData = new FormData(form);
@@ -197,41 +231,54 @@ async function recalculateATAR() {
     }
 }
 
-
-// Submit handler: only runs on first calculation
 document.getElementById("atar-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     await recalculateATAR();
     hasCalculated = true;
 });
 
-
-// Auto-update ATAR on edits **after first calculation**
 function autoRecalculateIfCalculated() {
     if (hasCalculated) recalculateATAR();
 }
 
-//Clear message when user is changing a subject
 function clearAllMessages() {
-    // This will clear the result message regardless of whether it's an error or normal output
     const resultDiv = document.getElementById("result");
     resultDiv.textContent = "";
 }
 
+// Attach listeners for clearing messages and switching modes
 for (let i = 1; i <= 5; i++) {
-    // Clear on any subject input (dropdown or typing)
-    document.getElementById(`subject${i}`).addEventListener('input', clearAllMessages);
-    document.getElementById(`subject${i}`).addEventListener('focus', clearAllMessages);
+    const subjectInput = document.getElementById(`subject${i}`);
+    const gradeSelect = document.getElementById(`grade${i}`);
+    const scoreInput = document.getElementById(`score${i}`);
 
-    // Clear on any grade selection
-    document.getElementById(`grade${i}`).addEventListener('change', clearAllMessages);
+    subjectInput.addEventListener('input', clearAllMessages);
+    subjectInput.addEventListener('focus', clearAllMessages);
 
-    // Clear on any score input
-    document.getElementById(`score${i}`).addEventListener('input', clearAllMessages);
+    gradeSelect.addEventListener('change', () => {
+        clearAllMessages();
+        setGradeMode(i);
+        autoRecalculateIfCalculated();
+    });
+
+    scoreInput.addEventListener('input', () => {
+        clearAllMessages();
+        setScoreMode(i);
+        autoRecalculateIfCalculated();
+    });
+
+    // Click/focus to switch mode
+    gradeSelect.addEventListener('focus', () => setGradeMode(i));
+    gradeSelect.addEventListener('click', () => setGradeMode(i));
+
+    scoreInput.addEventListener('focus', () => setScoreMode(i));
+    scoreInput.addEventListener('click', () => setScoreMode(i));
+
+    // Initial state: highlight grade side
+    setGradeMode(i);
 }
 
-
-// Toggle between raw and adjusted display (uses last calculated results)
+// Raw / Adjusted display toggle
 document.getElementById("check-5").addEventListener("change", function() {
     const resultDiv = document.getElementById("result");
     if (lastRawResult !== null && lastAdjustedResult !== null) {
